@@ -1,0 +1,63 @@
+<!-- hero.html -->
+<section class="relative overflow-hidden bg-surface-lilac">
+  <div class="mx-auto flex max-w-[1360px] flex-col gap-8 px-6 py-10 sm:gap-10 sm:px-10 sm:py-14 lg:flex-row lg:items-center lg:gap-6 lg:py-8">
+
+    <!-- Texte -->
+    <div class="flex w-full flex-col gap-5 lg:w-1/2 lg:gap-6">
+      <h1 class="text-3xl font-semibold leading-tight text-ink sm:text-5xl lg:text-6xl lg:leading-[68px]">
+        Des stickers faits pour coller à ton style.
+      </h1>
+
+      <p class="max-w-md text-base leading-7 text-ink-soft lg:text-lg lg:leading-8">
+        Choisis tes stickers, ajoute-les à ton sac, et commande en un message sur WhatsApp.
+      </p>
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+        <a
+          href="#shop"
+          class="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-surface-navy px-6 text-base font-semibold text-white transition hover:opacity-90 sm:w-auto sm:justify-start"
+        >
+          <lucide-icon [img]="ShoppingBag" class="size-5"></lucide-icon>
+          Voir la collection
+        </a>
+        <a
+          href="#how-it-works"
+          class="flex h-12 w-full items-center justify-center gap-2 rounded-full border border-ink px-6 text-base font-semibold text-ink transition hover:bg-ink hover:text-white sm:w-auto sm:justify-start"
+        >
+          <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
+          Comment commander
+        </a>
+      </div>
+
+      <div class="mt-1 flex flex-wrap items-center gap-6 text-sm text-ink-soft">
+        <span class="flex items-center gap-2">
+          <lucide-icon [img]="Truck" class="size-5 text-brand"></lucide-icon>
+          Livraison partout à Dakar
+        </span>
+      </div>
+    </div>
+
+    <!-- Collage de stickers -->
+    <div class="relative h-[240px] w-full sm:h-[380px] lg:h-[480px] lg:w-1/2">
+      @for (sticker of stickers; track sticker.imageUrl) {
+        <img
+          [src]="sticker.imageUrl"
+          [alt]="sticker.alt"
+          loading="lazy"
+          class="absolute rounded-full border-4 border-white object-cover shadow-lg {{ sticker.size }} {{ sticker.rotate }}"
+          [class.hidden]="sticker.hideOnMobile"
+          [class.sm:block]="sticker.hideOnMobile"
+          [style.top.%]="sticker.topPct"
+          [style.left.%]="sticker.leftPct"
+          [style.zIndex]="sticker.z"
+        />
+      }
+
+      <span
+        class="absolute bottom-2 right-2 flex size-16 -rotate-12 items-center justify-center rounded-full bg-brand-accent text-center text-xs font-semibold text-white shadow-lg sm:size-20 sm:text-sm lg:size-24 lg:text-base"
+      >
+        -25% dès 20 achetés
+      </span>
+    </div>
+  </div>
+</section>

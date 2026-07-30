@@ -1,0 +1,35 @@
+<!-- src/app/layout/header/header.html -->
+<header class="flex h-[88px] w-full items-center justify-between border-b border-border-hairline px-10">
+  <a routerLink="/" class="flex items-center gap-2">
+   <span class="text-xl font-semibold text-ink">{{ siteName }}</span>
+  </a>
+
+  <div class="mx-6 flex h-11 flex-1 max-w-[640px] items-center rounded-full border border-border-muted px-4">
+    <lucide-icon [img]="Search" class="mr-2 size-4 text-ink-faint"></lucide-icon>
+    <input type="search" placeholder="Search for stickers" class="w-full bg-transparent text-base text-ink outline-none placeholder:text-ink-faint" />
+  </div>
+
+  <div class="flex items-center gap-5">
+    <a 
+     
+        routerLink="/stickers"
+        routerLinkActive="border-b-1"
+        class="shrink-0   border-surface-navy px-5 py-2 text-sm font-semibold text-surface-navy transition cursor-pointer"
+      >
+        Boutique
+      </a>
+   
+    <button type="button" class="text-ink-faint cursor-pointer hover:text-ink" aria-label="Wishlist">
+      <lucide-icon [img]="Heart" class="size-6"></lucide-icon>
+    </button>
+
+    <button type="button" class="relative cursor-pointer text-ink-faint hover:text-ink" aria-label="Open bag">
+      <lucide-icon [img]="ShoppingBag" class="size-6"></lucide-icon>
+      @if (cart.totalItems() > 0) {
+        <span class="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-brand-accent text-[11px] font-semibold text-white">
+          {{ cart.totalItems() }}
+        </span>
+      }
+    </button>
+  </div>
+</header>

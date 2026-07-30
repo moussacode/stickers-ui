@@ -1,0 +1,122 @@
+@if (sticker(); as item) {
+  <section class="mx-auto max-w-[1360px] px-6 py-8 sm:px-10">
+    <a routerLink="/stickers" class="mb-6 flex w-fit items-center gap-1 text-sm font-semibold text-ink-soft hover:text-ink">
+      <lucide-icon [img]="ChevronLeft" class="size-4"></lucide-icon>
+      Retour au catalogue
+    </a>
+
+    <div class="flex flex-col gap-10 lg:flex-row">
+      <!-- Image -->
+      <div class="relative aspect-square w-full overflow-hidden rounded-xl bg-border-hairline lg:w-1/2">
+        <img [src]="item.imageUrl" [alt]="item.name" class="size-full object-cover" />
+
+        <button
+          type="button"
+          class="absolute right-4 top-4 flex size-10 items-center justify-center rounded-full bg-white/90 text-ink-faint transition hover:text-brand-accent"
+          [class.text-brand-accent]="isWished()"
+          (click)="isWished.set(!isWished())"
+          [attr.aria-label]="isWished() ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+        >
+          <lucide-icon [img]="Heart" class="size-5" [class.fill-current]="isWished()"></lucide-icon>
+        </button>
+
+        @if (item.discountPercent) {
+          <span class="absolute left-4 top-4 rounded-full bg-brand-accent px-3 py-1 text-sm font-semibold text-white">
+            -{{ item.discountPercent }}%
+          </span>
+        }
+      </div>
+
+      <!-- Infos -->
+      <div class="flex w-full flex-col gap-5 lg:w-1/2">
+        <div>
+          <a routerLink="/stickers" class="text-sm font-semibold text-brand hover:underline">{{ item.category }}</a>
+          <h1 class="mt-1 text-2xl font-semibold text-ink sm:text-3xl">{{ item.name }}</h1>
+          <p class="mt-1 text-sm text-ink-soft">Par {{ item.artist }}</p>
+        </div>
+
+        <div class="flex items-baseline gap-3">
+          <p class="text-2xl font-semibold text-brand-price">{{ item.price }} {{ item.currency }}</p>
+          @if (item.originalPrice) {
+            <p class="text-base text-ink-faint line-through">{{ item.originalPrice }} {{ item.currency }}</p>
+          }
+        </div>
+
+        
+
+        <!-- Quantité -->
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-semibold text-ink">Quantité</span>
+          <div class="flex items-center rounded-full border border-border-muted">
+            <button
+              type="button"
+              class="flex size-10 items-center justify-center text-ink hover:text-brand"
+              (click)="decrement()"
+              aria-label="Diminuer la quantité"
+            >
+              <lucide-icon [img]="Minus" class="size-4"></lucide-icon>
+            </button>
+            <span class="w-8 text-center text-base text-ink">{{ quantity() }}</span>
+            <button
+              type="button"
+              class="flex size-10 items-center justify-center text-ink hover:text-brand"
+              (click)="increment()"
+              aria-label="Augmenter la quantité"
+            >
+              <lucide-icon [img]="Plus" class="size-4"></lucide-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            class="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border-2 font-semibold transition"
+            [class.border-ink]="!justAdded()"
+            [class.text-ink]="!justAdded()"
+            [class.hover:bg-ink]="!justAdded()"
+            [class.hover:text-white]="!justAdded()"
+            [class.border-brand]="justAdded()"
+            [class.bg-brand]="justAdded()"
+            [class.text-white]="justAdded()"
+            (click)="addToBag()"
+          >
+            <lucide-icon [img]="ShoppingBag" class="size-5"></lucide-icon>
+            {{ justAdded() ? 'Ajouté au sac ✓' : 'Ajouter au sac' }}
+          </button>
+
+          <a
+            [href]="buyNowUrl()"
+            target="_blank"
+            rel="noopener"
+            class="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-[#25D366] font-semibold text-white transition hover:opacity-90"
+          >
+            <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
+            Commander directement
+          </a>
+        </div>
+
+        <p class="text-xs text-ink-faint">
+          Aucun paiement en ligne — "Commander directement" ouvre WhatsApp avec ce sticker uniquement ;
+          "Ajouter au sac" permet de continuer tes achats avant de commander.
+        </p>
+      </div>
+    </div>
+
+    @if (relatedStickers().length > 0) {
+      <div class="mt-16">
+        <h2 class="mb-6 text-xl font-semibold text-ink">Dans la même thématique</h2>
+        <app-product-grid [stickers]="relatedStickers()" />
+      </div>
+    }
+  </section>
+} @else {
+  <section class="mx-auto flex max-w-[1360px] flex-col items-center gap-4 px-6 py-20 text-center">
+    <p class="text-xl font-semibold text-ink">Sticker introuvable</p>
+    <p class="text-sm text-ink-soft">Ce sticker n'existe pas ou plus.</p>
+    <a routerLink="/stickers" class="rounded-full bg-surface-navy px-6 py-2 text-sm font-semibold text-white hover:opacity-90">
+      Retour au catalogue
+    </a>
+  </section>
+}

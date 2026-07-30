@@ -1,0 +1,25 @@
+<!-- src/app/pages/sticker-list/sticker-list.html -->
+<section class="mx-auto flex max-w-[1360px] flex-col gap-6 px-10 py-8">
+  <h1 class="text-2xl font-semibold text-ink">Stickers picked for you</h1>
+
+  <app-catalog-toolbar
+    [categories]="categories"
+    [itemCount]="pageStickers().length"
+    (categoryChange)="onCategoryChange($event)"
+    (sortChange)="onSortChange($event)"
+    (filtersChange)="onFiltersChange($event)"
+  />
+
+  <!-- <app-promo-banner [lines]="content.getPromoBannerLines()" /> -->
+
+  <!-- <app-keyword-list [keywords]="content.getKeywordPills()" /> -->
+  <!-- <app-trust-signal-list [signals]="content.getTrustSignals()" /> -->
+
+  <app-product-grid [stickers]="pageStickers()" />
+
+  <app-pagination
+    [totalPages]="totalPages()"
+    [currentPage]="currentPage()"
+    (pageChange)="setPage($event)"
+  />
+</section>

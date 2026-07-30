@@ -1,3 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@theme {
+  --font-sans: "Segoe UI", "Segoe UI Emoji", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Brand palette extracted from the Figma file */
+  --color-ink: #19124f;          /* primary text / headings */
+  --color-ink-soft: #757195;     /* secondary text */
+  --color-ink-faint: #9695a8;    /* tertiary text / borders */
+  --color-brand: #755eed;        /* topic chip fill */
+  --color-brand-price: #5137d7;  /* price text */
+  --color-brand-accent: #ff596f; /* "learn more" links, accent */
+  --color-brand-mark: #e41421;   /* logo mark */
+  --color-surface-navy: #07002f; /* dark chip / active pagination */
+  --color-surface-lilac: #ece9ff;/* promo banner background */
+  --color-surface-lilac-text: #36139a;
+  --color-border-muted: #d6dadf;
+  --color-border-hairline: #f2f2f6;
+  --color-border-dark: #40354e;
+  --color-surface-muted: rgb(233 233 240 / 0.6);
+  --color-overlay-hover: rgb(26 18 57 / 0.05);
+
+  --radius-pill: 1800px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: #ffffff;
+}

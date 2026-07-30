@@ -1,0 +1,21 @@
+<!-- src/app/pages/home/home.html -->
+<app-hero />
+
+
+<section class="mx-auto flex max-w-[1360px] flex-col gap-6 px-10 py-8">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-semibold text-ink">Populaires en ce moment</h2>
+    <a routerLink="/stickers" class="text-sm font-semibold text-brand hover:underline">Voir toute la collection →</a>
+  </div>
+
+  <app-product-grid [stickers]="previewStickers()" />
+
+  <a
+    routerLink="/stickers"
+    class="mx-auto cursor-pointer mt-2 flex h-12 items-center justify-center rounded-full border border-ink px-8 text-base font-semibold text-ink transition hover:bg-ink hover:text-white"
+  >
+    Voir plus de stickers
+  </a>
+</section>
+
+<app-how-it-works />
