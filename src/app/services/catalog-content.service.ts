@@ -13,6 +13,7 @@ import { RotateCcw, Code2,
   Send,
   Pin,
   Shirt, } from 'lucide-angular';
+import { CATEGORY_NAV } from '../mocks/catalog.mock';
 
 
 @Injectable({ providedIn: 'root' })
@@ -20,18 +21,7 @@ export class CatalogContentService {
 
   
   getCategoryNav(): NavItem[] {
-    return [
-      { label: 'Explore', href: '#' },
-      { label: 'Clothing', href: '#' },
-      { label: 'Stickers', href: '#' },
-      { label: 'Phone Cases', href: '#' },
-      { label: 'Wall Art', href: '#' },
-      { label: 'Home & Living', href: '#' },
-      { label: 'Kids & Babies', href: '#' },
-      { label: 'Accessories', href: '#' },
-      { label: 'Stationery & Office', href: '#' },
-      { label: 'Gifts', href: '#' },
-    ];
+    return CATEGORY_NAV;
   }
    getCategoryHighlights(): any[] {
     return [

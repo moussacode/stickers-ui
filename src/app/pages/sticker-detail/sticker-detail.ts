@@ -74,6 +74,9 @@ export class StickerDetail {
       '',
       `- ${qty}x ${current.name} — ${current.price * qty} ${current.currency}`,
     ].join('\n');
+
+
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  
   }
 }

@@ -59,7 +59,7 @@
             <span class="w-8 text-center text-base text-ink">{{ quantity() }}</span>
             <button
               type="button"
-              class="flex size-10 items-center justify-center text-ink hover:text-brand"
+              class="flex size-10 p-3 items-center justify-center text-ink hover:text-brand"
               (click)="increment()"
               aria-label="Augmenter la quantité"
             >
@@ -72,7 +72,7 @@
         <div class="flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
-            class="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border-2 font-semibold transition"
+            class="flex h-12 py-3 flex-1 items-center justify-center gap-2 rounded-full border-2 font-semibold transition"
             [class.border-ink]="!justAdded()"
             [class.text-ink]="!justAdded()"
             [class.hover:bg-ink]="!justAdded()"
@@ -90,7 +90,7 @@
             [href]="buyNowUrl()"
             target="_blank"
             rel="noopener"
-            class="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-[#25D366] font-semibold text-white transition hover:opacity-90"
+            class="flex h-12 flex-1 py-3 items-center justify-center gap-2 rounded-full bg-[#25D366] font-semibold text-white transition hover:opacity-90"
           >
             <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
             Commander directement
@@ -98,7 +98,7 @@
         </div>
 
         <p class="text-xs text-ink-faint">
-          Aucun paiement en ligne — "Commander directement" ouvre WhatsApp avec ce sticker uniquement ;
+          Aucun paiement en ligne "Commander directement" ouvre WhatsApp avec ce sticker uniquement ;
           "Ajouter au sac" permet de continuer tes achats avant de commander.
         </p>
       </div>

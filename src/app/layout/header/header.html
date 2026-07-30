@@ -1,35 +1,144 @@
-<!-- src/app/layout/header/header.html -->
-<header class="flex h-[88px] w-full items-center justify-between border-b border-border-hairline px-10">
-  <a routerLink="/" class="flex items-center gap-2">
-   <span class="text-xl font-semibold text-ink">{{ siteName }}</span>
-  </a>
+<header 
+class="fixed top-0 left-0 z-50 flex h-16 md:h-[88px] w-full items-center justify-between border-b border-border-hairline bg-white px-4 sm:px-6 lg:px-10">
 
-  <div class="mx-6 flex h-11 flex-1 max-w-[640px] items-center rounded-full border border-border-muted px-4">
-    <lucide-icon [img]="Search" class="mr-2 size-4 text-ink-faint"></lucide-icon>
-    <input type="search" placeholder="Search for stickers" class="w-full bg-transparent text-base text-ink outline-none placeholder:text-ink-faint" />
-  </div>
 
-  <div class="flex items-center gap-5">
-    <a 
-     
-        routerLink="/stickers"
-        routerLinkActive="border-b-1"
-        class="shrink-0   border-surface-navy px-5 py-2 text-sm font-semibold text-surface-navy transition cursor-pointer"
-      >
-        Boutique
-      </a>
-   
-    <button type="button" class="text-ink-faint cursor-pointer hover:text-ink" aria-label="Wishlist">
-      <lucide-icon [img]="Heart" class="size-6"></lucide-icon>
-    </button>
+<!-- Logo -->
+<a routerLink="/" class="flex items-center gap-2">
+  <span class="text-xl font-semibold text-ink">
+    {{ siteName }}
+  </span>
+</a>
 
-    <button type="button" class="relative cursor-pointer text-ink-faint hover:text-ink" aria-label="Open bag">
-      <lucide-icon [img]="ShoppingBag" class="size-6"></lucide-icon>
-      @if (cart.totalItems() > 0) {
-        <span class="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-brand-accent text-[11px] font-semibold text-white">
-          {{ cart.totalItems() }}
-        </span>
-      }
-    </button>
-  </div>
+
+<!-- Recherche desktop -->
+<div class="hidden md:flex mx-6 h-11 flex-1 max-w-[640px] items-center rounded-full border border-border-muted px-4">
+
+  <lucide-icon 
+    [img]="Search"
+    class="mr-2 size-4 text-ink-faint">
+  </lucide-icon>
+
+  <input
+    type="search"
+    placeholder="Search for stickers"
+    class="w-full bg-transparent outline-none"
+  />
+
+</div>
+
+
+<!-- Desktop actions -->
+<div class="hidden md:flex items-center gap-5">
+
+
+<a
+ routerLink="/stickers"
+ class="text-sm font-semibold text-surface-navy"
+>
+ Boutique
+</a>
+
+
+<button>
+ <lucide-icon [img]="Heart"></lucide-icon>
+</button>
+
+
+<button
+ class="relative"
+ (click)="cartOpen.emit()"
+>
+
+<lucide-icon [img]="ShoppingBag"></lucide-icon>
+
+
+@if(cart.totalItems() > 0){
+<span
+class="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-brand-accent text-white text-xs">
+{{cart.totalItems()}}
+</span>
+}
+
+</button>
+
+
+</div>
+
+
+
+<!-- Mobile actions -->
+<div class="flex md:hidden items-center gap-4">
+
+
+
+<button
+(click)="toggleMenu()"
+>
+
+@if(mobileMenuOpen()){
+
+<lucide-icon 
+[img]="X"
+class="size-6">
+</lucide-icon>
+
+}
+@else {
+
+<lucide-icon 
+[img]="Menu"
+class="size-6">
+</lucide-icon>
+
+}
+
+</button>
+
+
+</div>
+
+
 </header>
+
+@if(mobileMenuOpen()){
+
+<div 
+class="fixed inset-x-0 top-16 z-40 bg-white border-b border-border-hairline shadow-lg md:hidden">
+
+
+<nav class="flex flex-col p-6 gap-5">
+
+
+<a 
+routerLink="/stickers"
+(click)="toggleMenu()"
+class="flex items-center gap-3 text-lg font-semibold">
+
+<lucide-icon [img]="Store"></lucide-icon>
+
+Boutique
+
+</a>
+
+
+
+
+
+<button
+(click)="cartOpen.emit(); toggleMenu()"
+class="flex items-center gap-3 text-lg"
+>
+
+<lucide-icon [img]="ShoppingBag"></lucide-icon>
+
+Mon panier
+
+</button>
+
+
+</nav>
+
+
+</div>
+
+}

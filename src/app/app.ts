@@ -6,13 +6,15 @@ import { Header } from './layout/header/header';
 import { CatalogContentService } from './services/catalog-content.service';
 import { inject } from '@angular/core';
 import { SiteFooter } from "./components/site-footer/site-footer";
+import { CartDrawer } from "./layout/cart-drawer/cart-drawer";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, SiteFooter],
+  imports: [RouterOutlet, Header, SiteFooter, CartDrawer],
   templateUrl: './app.html',
 })
 export class App {
   protected readonly content = inject(CatalogContentService);
+  
   protected readonly cartOpen = signal(false);
 }
