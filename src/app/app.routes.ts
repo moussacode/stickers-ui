@@ -1,19 +1,33 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-import { StickerList } from './pages/sticker-list/sticker-list';
-import { StickerDetail } from './pages/sticker-detail/sticker-detail';
 
 export const routes: Routes = [
 
-    {
+  {
     path: '',
-    component: Home,
-    
+    loadComponent: () =>
+      import('./pages/home/home')
+        .then(m => m.Home),
   },
-  { path: 'stickers', component: StickerList },
-   {
+
+  {
+    path: 'stickers',
+    loadComponent: () =>
+      import('./pages/sticker-list/sticker-list')
+        .then(m => m.StickerList),
+  },
+
+  {
     path: 'stickers/:id',
-    component: StickerDetail,
+    loadComponent: () =>
+      import('./pages/sticker-detail/sticker-detail')
+        .then(m => m.StickerDetail),
+  },
+
+  {
+    path: 'custom-sticker',
+    loadComponent: () =>
+      import('./pages/custom-sticker/custom-sticker')
+        .then(m => m.CustomSticker),
   },
 
 ];

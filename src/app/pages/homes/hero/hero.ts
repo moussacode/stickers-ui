@@ -1,6 +1,9 @@
 // hero.ts
 import { Component } from '@angular/core';
 import { LucideAngularModule, ShoppingBag, MessageCircle, Truck } from 'lucide-angular';
+import { WhatsAppService } from '../../../services/whatsapp.service';
+import { inject } from '@angular/core';
+import { RouterLink } from "@angular/router";
 
 interface FloatingSticker {
   imageUrl: string;
@@ -15,13 +18,14 @@ interface FloatingSticker {
 
 @Component({
   selector: 'app-hero',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterLink],
   templateUrl: './hero.html',
 })
 export class Hero {
   protected readonly ShoppingBag = ShoppingBag;
   protected readonly MessageCircle = MessageCircle;
   protected readonly Truck = Truck;
+
 
   protected readonly stickers: FloatingSticker[] = [
     { imageUrl: 'images/products/python(7).png', alt: 'Bash Terminal sticker', size: 'size-28 sm:size-40 lg:size-48', topPct: 2, leftPct: 4, rotate: '-rotate-6', z: 2 },
