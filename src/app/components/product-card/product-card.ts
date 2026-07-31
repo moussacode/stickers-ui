@@ -26,7 +26,7 @@ import { RouterLink } from "@angular/router";
           </span>
         }
 
-        <button
+        <!-- <button
           type="button"
           class="absolute cursor-pointer right-2 top-2 flex size-8 items-center justify-center rounded-full bg-white/90 text-ink-faint transition hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"
           [class.text-brand-accent]="isWished()"
@@ -35,7 +35,7 @@ import { RouterLink } from "@angular/router";
           [attr.aria-pressed]="isWished()"
         >
           <lucide-icon [img]="Heart" class="size-4 " [class.fill-current]="isWished()"></lucide-icon>
-        </button>
+        </button> -->
       </div>
 
       <div class="flex flex-1 flex-col gap-2 p-3">
