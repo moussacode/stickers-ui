@@ -30,6 +30,10 @@ body {
   height: 100%;
 }
 
+html,
+body {
+  touch-action: manipulation;
+}
 body {
   margin: 0;
   font-family: var(--font-sans);

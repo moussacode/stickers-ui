@@ -1,24 +1,179 @@
 <!-- src/app/pages/sticker-list/sticker-list.html -->
-<section class="mx-auto flex max-w-[1360px] flex-col gap-6 px-10 py-8">
-  <h1 class="text-2xl font-semibold text-ink">Stickers picked for you</h1>
 
-  <app-catalog-toolbar
-    [categories]="categories"
-    [itemCount]="pageStickers().length"
-    (categoryChange)="onCategoryChange($event)"
-    (sortChange)="onSortChange($event)"
-    (filtersChange)="onFiltersChange($event)"
-  />
+<section class="mx-auto flex max-w-[1360px] flex-col gap-6 px-4 py-8 sm:px-10">
+  <!-- Header -->
+  <div class="flex flex-col gap-2">
+    <h1 class="text-2xl font-semibold text-ink">Stickers choisis pour vous</h1>
 
-  <!-- <app-promo-banner [lines]="content.getPromoBannerLines()" /> -->
-  <!-- <app-keyword-list [keywords]="content.getKeywordPills()" /> -->
-  <!-- <app-trust-signal-list [signals]="content.getTrustSignals()" /> -->
+    <p class="text-sm text-ink-soft">{{ resultCount() }} stickers disponibles</p>
+  </div>
 
-  <app-product-grid [stickers]="pageStickers()" />
+  <!-- Toolbar -->
+  <div class="flex flex-col gap-4 rounded-xl border border-border-hairline bg-white p-4">
+    <!-- Recherche -->
+    <div class="relative">
+      <input
+        type="search"
+        placeholder="Rechercher un sticker, une technologie..."
+        class="h-12 w-full rounded-full border border-border-muted bg-white px-5 text-sm outline-none focus:border-brand"
+        (input)="onSearchChange($any($event.target).value)"
+      />
+    </div>
 
-  <app-pagination
-    [totalPages]="totalPages()"
-    [currentPage]="currentPage()"
-    (pageChange)="setPage($event)"
-  />
+    <!-- Catégories -->
+    <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+      @for (cat of categoriesWithCount(); track cat.label) {
+        <button
+          (click)="onCategoryChange(cat.label)"
+          class="shrink-0 cursor-pointer rounded-full border px-4 py-2 text-sm transition"
+          [class.bg-ink]="cat.label === category()"
+          [class.text-white]="cat.label === category()"
+          [class.border-ink]="cat.label === category()"
+          [class.border-border-muted]="cat.label !== category()"
+        >
+          {{ cat.label }}
+
+          <span class="ml-1 text-xs opacity-70">
+            {{ cat.count }}
+          </span>
+        </button>
+      }
+    </div>
+
+    <!-- Filtres -->
+    <div class="flex flex-col gap-3 justify-end  sm:flex-row sm:items-center sm:justify-between">
+      <!-- Promotion -->
+      <!-- <div class="flex items-center gap-3">
+        
+        <label 
+          class="
+            flex items-center gap-2
+            cursor-pointer
+            text-sm
+            text-ink-soft
+          "
+        >
+
+          <input
+            type="checkbox"
+            [checked]="filters().onSaleOnly"
+            (change)="onFiltersChange({
+              onSaleOnly:$any($event.target).checked,
+              maxPrice:filters().maxPrice
+            })"
+          >
+
+          Promotions
+
+        </label>
+
+      </div> -->
+
+      <!-- Tri -->
+      <div class="flex items-center gap-3">
+
+  <label 
+    for="sort"
+    class="hidden text-sm font-medium text-ink-soft sm:block"
+  >
+    Trier par
+  </label>
+
+  <div class="relative">
+
+    <select
+      id="sort"
+      class="
+        h-11
+        min-w-[180px]
+        appearance-none
+        rounded-full
+        border border-border-muted
+        bg-white
+        px-5
+        pr-10
+        text-sm
+        font-medium
+        text-ink
+        outline-none
+        transition
+        hover:border-ink
+        focus:border-brand
+        focus:ring-2
+        focus:ring-brand/20
+        cursor-pointer
+      "
+      [value]="sort()"
+      (change)="onSortChange($any($event.target).value)"
+    >
+
+      <option value="relevant">
+        Pertinence
+      </option>
+
+      <option value="price-asc">
+        Prix : moins cher
+      </option>
+
+      <option value="price-desc">
+        Prix : plus cher
+      </option>
+
+      <option value="newest">
+        Nouveautés
+      </option>
+
+    </select>
+
+
+    <!-- Chevron -->
+    <lucide-icon
+      [img]="ChevronDown"
+      class="
+        pointer-events-none
+        absolute
+        right-4
+        top-1/2
+        size-4
+        -translate-y-1/2
+        text-ink-soft
+      "
+    />
+
+  </div>
+
+</div>
+    </div>
+
+    <!-- Reset -->
+    @if (search() || category() !== 'All Stickers' || filters().onSaleOnly || filters().maxPrice) {
+      <button
+        type="button"
+        class="text-left text-sm font-semibold text-brand"
+        (click)="resetFilters()"
+      >
+        Réinitialiser les filtres
+      </button>
+    }
+  </div>
+
+  <!-- Produits -->
+
+  @if (pageStickers().length > 0) {
+    <app-product-grid [stickers]="pageStickers()" />
+  } @else {
+    <div class="flex h-60 items-center justify-center rounded-xl border text-sm text-ink-soft">
+      Aucun sticker trouvé
+    </div>
+  }
+
+  <!-- Pagination -->
+
+  @if (totalPages() > 1) {
+    <app-pagination
+      [totalPages]="totalPages()"
+      [currentPage]="currentPage()"
+      (pageChange)="setPage($event)"
+    />
+  }
 </section>

@@ -1,112 +1,270 @@
 @if (sticker(); as item) {
   <section class="mx-auto max-w-[1360px] px-6 py-8 sm:px-10">
-    <a routerLink="/stickers" class="mb-6 flex w-fit items-center gap-1 text-sm font-semibold text-ink-soft hover:text-ink">
-      <lucide-icon [img]="ChevronLeft" class="size-4"></lucide-icon>
-      Retour au catalogue
-    </a>
+    <div class="mb-6 text-lg">
+      <a routerLink="/stickers" class="text-ink-faint hover:text-ink">Stickers /</a>
+      <span class="font-medium text-brand"> {{ item.category }}</span>
+    </div>
 
-    <div class="flex flex-col gap-10 lg:flex-row">
-      <!-- Image -->
-      <div class="relative aspect-square w-full overflow-hidden rounded-xl bg-border-hairline lg:w-1/2">
-        <img [src]="item.imageUrl" [alt]="item.name" class="size-full object-cover" />
+    <div class="flex flex-col gap-10 lg:flex-row lg:gap-14">
+      <!-- Galerie -->
+      <div class="flex w-full flex-col gap-4 lg:w-1/2">
+        <div class="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl bg-surface-lilac">
+          <img
+            [src]="item.images[activeImageIndex()]"
+            [alt]="item.name"
+            class="h-3/4 w-3/4 object-contain"
+          />
+        </div>
 
-        <button
-          type="button"
-          class="absolute right-4 top-4 flex size-10 items-center justify-center rounded-full bg-white/90 text-ink-faint transition hover:text-brand-accent"
-          [class.text-brand-accent]="isWished()"
-          (click)="isWished.set(!isWished())"
-          [attr.aria-label]="isWished() ? 'Retirer des favoris' : 'Ajouter aux favoris'"
-        >
-          <lucide-icon [img]="Heart" class="size-5" [class.fill-current]="isWished()"></lucide-icon>
-        </button>
+        @if (item.images.length > 1) {
+          <div class="flex items-center justify-between gap-3">
+            <button
+              type="button"
+              class="flex size-11 items-center justify-center rounded-full bg-white text-ink shadow-sm hover:bg-surface-muted"
+              (click)="prevImage()"
+              aria-label="Image précédente"
+            >
+              <lucide-icon [img]="ChevronLeft" class="size-5"></lucide-icon>
+            </button>
 
-        @if (item.discountPercent) {
-          <span class="absolute left-4 top-4 rounded-full bg-brand-accent px-3 py-1 text-sm font-semibold text-white">
-            -{{ item.discountPercent }}%
-          </span>
+            <div class="flex flex-1 items-center justify-center gap-3">
+              @for (image of item.images; track $index) {
+                <button
+                  type="button"
+                  class="relative size-20 overflow-hidden rounded-2xl border-2 bg-border-hairline sm:size-24"
+                  [class.border-surface-navy]="$index === activeImageIndex()"
+                  [class.border-transparent]="$index !== activeImageIndex()"
+                  (click)="selectImage($index)"
+                  [attr.aria-label]="'Voir image ' + ($index + 1)"
+                >
+                  <img [src]="image" [alt]="item.name" class="size-full object-contain p-2" />
+                </button>
+              }
+            </div>
+
+            <button
+              type="button"
+              class="flex size-11 items-center justify-center rounded-full bg-white text-ink shadow-sm hover:bg-surface-muted"
+              (click)="nextImage()"
+              aria-label="Image suivante"
+            >
+              <lucide-icon [img]="ChevronRight" class="size-5"></lucide-icon>
+            </button>
+          </div>
         }
       </div>
 
       <!-- Infos -->
-      <div class="flex w-full flex-col gap-5 lg:w-1/2">
-        <div>
-          <a routerLink="/stickers" class="text-sm font-semibold text-brand hover:underline">{{ item.category }}</a>
-          <h1 class="mt-1 text-2xl font-semibold text-ink sm:text-3xl">{{ item.name }}</h1>
-          <p class="mt-1 text-sm text-ink-soft">Par {{ item.artist }}</p>
-        </div>
+      <div class="flex w-full flex-col gap-6 lg:w-1/2">
+        <div class="flex flex-col gap-4">
+          <h1 class="text-3xl font-semibold leading-tight text-ink sm:text-4xl">{{ item.name }}</h1>
 
-        <div class="flex items-baseline gap-3">
-          <p class="text-2xl font-semibold text-brand-price">{{ item.price }} {{ item.currency }}</p>
-          @if (item.originalPrice) {
-            <p class="text-base text-ink-faint line-through">{{ item.originalPrice }} {{ item.currency }}</p>
+          <div class="flex flex-wrap items-center gap-5">
+            @if (item.rating) {
+              <div class="flex items-center gap-3">
+                <div class="flex gap-1">
+                  @for (star of [1, 2, 3, 4, 5]; track star) {
+                    <lucide-icon
+                      [img]="Star"
+                      class="size-5"
+                      [class.text-yellow-500]="star <= item.rating!"
+                      [class.fill-current]="star <= item.rating!"
+                      [class.text-border-muted]="star > item.rating!"
+                    ></lucide-icon>
+                  }
+                </div>
+                @if (item.reviewCount) {
+                  <span class="text-base font-medium text-ink">{{ item.reviewCount }} avis</span>
+                }
+              </div>
+              <div class="h-5 w-px bg-border-muted"></div>
+            }
+            <span class="text-base font-medium text-ink">Par {{ item.artist }}</span>
+          </div>
+
+          <div class="flex items-end gap-3">
+            <p class="text-3xl font-semibold text-brand-price">{{ item.price }} {{ item.currency }}</p>
+            @if (item.originalPrice) {
+              <p class="pb-1 text-base text-ink-faint line-through">{{ item.originalPrice }} {{ item.currency }}</p>
+            }
+          </div>
+
+          <div class="h-px w-full bg-border-muted"></div>
+
+          @if (item.description) {
+            <p class="max-w-md text-base leading-6 text-ink-soft">{{ item.description }}</p>
           }
         </div>
 
-        
-
-        <!-- Quantité -->
-        <div class="flex items-center gap-3">
-          <span class="text-sm font-semibold text-ink">Quantité</span>
-          <div class="flex items-center rounded-full border border-border-muted">
-            <button
-              type="button"
-              class="flex size-10 items-center justify-center text-ink hover:text-brand"
-              (click)="decrement()"
-              aria-label="Diminuer la quantité"
-            >
-              <lucide-icon [img]="Minus" class="size-4"></lucide-icon>
+        <!-- Quantité + Ajouter au sac -->
+        <div class="flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-6 rounded-full bg-surface-muted px-3 py-2.5">
+            <button type="button" class="text-ink hover:text-brand" (click)="decrement()" aria-label="Diminuer la quantité">
+              <lucide-icon [img]="Minus" class="size-5"></lucide-icon>
             </button>
-            <span class="w-8 text-center text-base text-ink">{{ quantity() }}</span>
-            <button
-              type="button"
-              class="flex size-10 p-3 items-center justify-center text-ink hover:text-brand"
-              (click)="increment()"
-              aria-label="Augmenter la quantité"
-            >
-              <lucide-icon [img]="Plus" class="size-4"></lucide-icon>
+            <span class="text-lg font-medium text-ink">{{ quantity() }}</span>
+            <button type="button" class="text-ink hover:text-brand" (click)="increment()" aria-label="Augmenter la quantité">
+              <lucide-icon [img]="Plus" class="size-5"></lucide-icon>
             </button>
           </div>
-        </div>
 
-        <!-- Actions -->
-        <div class="flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
-            class="flex h-12 py-3 flex-1 items-center justify-center gap-2 rounded-full border-2 font-semibold transition"
-            [class.border-ink]="!justAdded()"
-            [class.text-ink]="!justAdded()"
-            [class.hover:bg-ink]="!justAdded()"
-            [class.hover:text-white]="!justAdded()"
-            [class.border-brand]="justAdded()"
+            class="flex flex-1 items-center justify-center gap-2.5 rounded-full px-6 py-2.5 text-lg font-medium text-white transition"
+            [class.bg-surface-navy]="!justAdded()"
             [class.bg-brand]="justAdded()"
-            [class.text-white]="justAdded()"
             (click)="addToBag()"
           >
-            <lucide-icon [img]="ShoppingBag" class="size-5"></lucide-icon>
             {{ justAdded() ? 'Ajouté au sac ✓' : 'Ajouter au sac' }}
           </button>
-
-          <a
-            [href]="buyNowUrl()"
-            target="_blank"
-            rel="noopener"
-            class="flex h-12 flex-1 py-3 items-center justify-center gap-2 rounded-full bg-[#25D366] font-semibold text-white transition hover:opacity-90"
-          >
-            <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
-            Commander directement
-          </a>
         </div>
 
-        <p class="text-xs text-ink-faint">
-          Aucun paiement en ligne "Commander directement" ouvre WhatsApp avec ce sticker uniquement ;
-          "Ajouter au sac" permet de continuer tes achats avant de commander.
-        </p>
+        <a
+          [href]="buyNowUrl()"
+          target="_blank"
+          rel="noopener"
+          class="flex h-12 items-center justify-center gap-2 rounded-full bg-[#25D366] text-lg font-medium text-white transition hover:opacity-90"
+        >
+          <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
+          Commander directement sur WhatsApp
+        </a>
+
+        <!-- <button
+          type="button"
+          class="flex w-fit items-center gap-2 text-lg font-medium text-ink hover:text-brand-accent"
+          (click)="isWished.set(!isWished())"
+        >
+          <lucide-icon [img]="Heart" class="size-6" [class.fill-current]="isWished()" [class.text-brand-accent]="isWished()"></lucide-icon>
+          {{ isWished() ? 'Ajouté aux favoris' : 'Ajouter aux favoris' }}
+        </button> -->
+
+        <!-- Onglets -->
+        <div class="flex items-center gap-3 rounded-full bg-border-hairline p-1">
+          <button
+            type="button"
+            class="flex-1 rounded-full px-3 py-1.5 text-base font-medium transition"
+            [class.bg-white]="activeTab() === 'details'"
+            [class.shadow-sm]="activeTab() === 'details'"
+            [class.text-ink]="activeTab() === 'details'"
+            [class.text-ink-soft]="activeTab() !== 'details'"
+            (click)="setTab('details')"
+          >
+            Détails
+          </button>
+          <button
+            type="button"
+            class="flex-1 rounded-full px-3 py-1.5 text-base font-medium transition"
+            [class.bg-white]="activeTab() === 'packaging'"
+            [class.shadow-sm]="activeTab() === 'packaging'"
+            [class.text-ink]="activeTab() === 'packaging'"
+            [class.text-ink-soft]="activeTab() !== 'packaging'"
+            (click)="setTab('packaging')"
+          >
+            Packaging
+          </button>
+          <button
+            type="button"
+            class="flex-1 rounded-full px-3 py-1.5 text-base font-medium transition"
+            [class.bg-white]="activeTab() === 'shipping'"
+            [class.shadow-sm]="activeTab() === 'shipping'"
+            [class.text-ink]="activeTab() === 'shipping'"
+            [class.text-ink-soft]="activeTab() !== 'shipping'"
+            (click)="setTab('shipping')"
+          >
+            Livraison
+          </button>
+        </div>
+
+        @switch (activeTab()) {
+          @case ('details') {
+            <p class="text-sm leading-6 text-ink-soft">
+              Sticker vinyle découpé, imprimé en couleurs vives, épaisseur standard, fini mat.
+              Catégorie : {{ item.category }}.
+            </p>
+          }
+          @case ('packaging') {
+            <p class="text-sm leading-6 text-ink-soft">
+              Livré à plat dans une pochette protectrice pour éviter tout pliage pendant le transport.
+            </p>
+          }
+          @case ('shipping') {
+            <p class="text-sm leading-6 text-ink-soft">
+              Pas de paiement en ligne : la commande se finalise directement sur WhatsApp avec le vendeur,
+              qui te communique les modalités de livraison ou de retrait à Dakar.
+            </p>
+          }
+        }
+
+        <!-- Accordéon -->
+        <div class="flex flex-col">
+          <div class="border-b border-border-muted py-4">
+            <button
+              type="button"
+              class="flex w-full items-center justify-between"
+              (click)="toggleSection('features')"
+            >
+              <span class="text-base font-medium text-ink">Caractéristiques</span>
+              <lucide-icon
+                [img]="ChevronDown"
+                class="size-5 text-ink transition-transform"
+                [class.rotate-180]="openSection() === 'features'"
+              ></lucide-icon>
+            </button>
+            @if (openSection() === 'features') {
+              <p class="mt-3 text-sm leading-6 text-ink-soft">
+                Vinyle résistant à l'eau, aux UV et aux rayures. Se décolle sans laisser de résidu.
+              </p>
+            }
+          </div>
+
+          <div class="border-b border-border-muted py-4">
+            <button
+              type="button"
+              class="flex w-full items-center justify-between"
+              (click)="toggleSection('application')"
+            >
+              <span class="text-base font-medium text-ink">Comment l'appliquer</span>
+              <lucide-icon
+                [img]="ChevronDown"
+                class="size-5 text-ink transition-transform"
+                [class.rotate-180]="openSection() === 'application'"
+              ></lucide-icon>
+            </button>
+            @if (openSection() === 'application') {
+              <p class="mt-3 text-sm leading-6 text-ink-soft">
+                Nettoie et sèche la surface, décolle le film protecteur, positionne le sticker, puis lisse
+                du centre vers les bords pour chasser les bulles d'air.
+              </p>
+            }
+          </div>
+
+          <div class="py-4">
+            <button
+              type="button"
+              class="flex w-full items-center justify-between"
+              (click)="toggleSection('quality')"
+            >
+              <span class="text-base font-medium text-ink">Qualité</span>
+              <lucide-icon
+                [img]="ChevronDown"
+                class="size-5 text-ink transition-transform"
+                [class.rotate-180]="openSection() === 'quality'"
+              ></lucide-icon>
+            </button>
+            @if (openSection() === 'quality') {
+              <p class="mt-3 text-sm leading-6 text-ink-soft">
+                Impression haute résolution, couleurs qui ne se ternissent pas au soleil, découpe précise
+                sur mesure.
+              </p>
+            }
+          </div>
+        </div>
       </div>
     </div>
 
     @if (relatedStickers().length > 0) {
       <div class="mt-16">
-        <h2 class="mb-6 text-xl font-semibold text-ink">Dans la même thématique</h2>
+        <h2 class="mb-6 text-xl font-semibold text-ink">Dans la même catégorie</h2>
         <app-product-grid [stickers]="relatedStickers()" />
       </div>
     }

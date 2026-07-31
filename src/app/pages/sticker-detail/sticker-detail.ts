@@ -1,13 +1,26 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LucideAngularModule, Heart, Minus, Plus, ShoppingBag, MessageCircle, ChevronLeft } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Heart,
+  Minus,
+  Plus,
+  ShoppingBag,
+  MessageCircle,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Star,
+} from 'lucide-angular';
 import { StickerService } from '../../services/sticker.service';
 import { CartService } from '../../services/cart.service';
 import { WHATSAPP_NUMBER } from '../../config/site-config';
 import { ProductGrid } from '../../components/product-grid/product-grid';
 
 const RELATED_COUNT = 4;
+type DetailTab = 'details' | 'packaging' | 'shipping';
+type AccordionSection = 'features' | 'application' | 'quality';
 
 @Component({
   selector: 'app-sticker-detail',
@@ -20,14 +33,15 @@ export class StickerDetail {
   protected readonly cart = inject(CartService);
 
   protected readonly ChevronLeft = ChevronLeft;
+  protected readonly ChevronRight = ChevronRight;
+  protected readonly ChevronDown = ChevronDown;
   protected readonly Heart = Heart;
   protected readonly Minus = Minus;
   protected readonly Plus = Plus;
   protected readonly ShoppingBag = ShoppingBag;
   protected readonly MessageCircle = MessageCircle;
+  protected readonly Star = Star;
 
-  // Réactif au paramètre d'URL : si l'utilisateur clique sur un sticker "similaire"
-  // depuis cette même page, l'id change sans recréer le composant.
   private readonly paramMap = toSignal(this.route.paramMap, { initialValue: this.route.snapshot.paramMap });
 
   protected readonly sticker = computed(() => {
@@ -44,9 +58,23 @@ export class StickerDetail {
       .slice(0, RELATED_COUNT);
   });
 
+  protected readonly activeImageIndex = signal(0);
+
+  protected selectImage(index: number): void {
+    this.activeImageIndex.set(index);
+  }
+
+  protected prevImage(): void {
+    const total = this.sticker()?.images.length ?? 1;
+    this.activeImageIndex.update((i) => (i === 0 ? total - 1 : i - 1));
+  }
+
+  protected nextImage(): void {
+    const total = this.sticker()?.images.length ?? 1;
+    this.activeImageIndex.update((i) => (i === total - 1 ? 0 : i + 1));
+  }
+
   protected readonly quantity = signal(1);
-  protected readonly isWished = signal(false);
-  protected readonly justAdded = signal(false);
 
   protected increment(): void {
     this.quantity.update((q) => q + 1);
@@ -56,6 +84,9 @@ export class StickerDetail {
     this.quantity.update((q) => Math.max(1, q - 1));
   }
 
+  protected readonly isWished = signal(false);
+  protected readonly justAdded = signal(false);
+
   protected addToBag(): void {
     const current = this.sticker();
     if (!current) return;
@@ -64,7 +95,6 @@ export class StickerDetail {
     setTimeout(() => this.justAdded.set(false), 1200);
   }
 
-  /** Commande directe pour ce seul sticker, sans passer par le sac. */
   protected buyNowUrl(): string {
     const current = this.sticker();
     if (!current) return '#';
@@ -74,9 +104,18 @@ export class StickerDetail {
       '',
       `- ${qty}x ${current.name} — ${current.price * qty} ${current.currency}`,
     ].join('\n');
-
-
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  
+  }
+
+  protected readonly activeTab = signal<DetailTab>('details');
+
+  protected setTab(tab: DetailTab): void {
+    this.activeTab.set(tab);
+  }
+
+  protected readonly openSection = signal<AccordionSection | null>('application');
+
+  protected toggleSection(section: AccordionSection): void {
+    this.openSection.update((current) => (current === section ? null : section));
   }
 }

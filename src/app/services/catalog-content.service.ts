@@ -23,16 +23,34 @@ export class CatalogContentService {
   getCategoryNav(): NavItem[] {
     return CATEGORY_NAV;
   }
-   getCategoryHighlights(): any[] {
-    return [
-      { label: 'Dev & Code', imageUrl: 'https://picsum.photos/seed/cat-dev/200/200' },
-      { label: 'Gaming', imageUrl: 'https://picsum.photos/seed/cat-gaming/200/200' },
-      { label: 'Anime', imageUrl: 'https://picsum.photos/seed/cat-anime/200/200' },
-      { label: 'Motivation', imageUrl: 'https://picsum.photos/seed/cat-motiv/200/200' },
-      { label: 'Animaux mignons', imageUrl: 'https://picsum.photos/seed/cat-cute/200/200' },
-      { label: 'Humour', imageUrl: 'https://picsum.photos/seed/cat-funny/200/200' },
-    ];
-  }
+  getCategoryHighlights() {
+  return [
+    {
+      label: 'Dev & Code',
+      imageUrl: 'images/categories/dev-code.png'
+    },
+    {
+      label: 'Gaming',
+      imageUrl: 'images/categories/gaming.png'
+    },
+    {
+      label: 'Anime',
+      imageUrl: 'images/categories/anime.png'
+    },
+    {
+      label: 'Motivation',
+      imageUrl: 'images/categories/motivation.png'
+    },
+    {
+      label: 'Animaux mignons',
+      imageUrl: 'images/categories/animaux.png'
+    },
+    {
+      label: 'Humour',
+      imageUrl: 'images/categories/humour.png'
+    },
+  ];
+}
 
   getRelatedTopics(): string[] {
     return [

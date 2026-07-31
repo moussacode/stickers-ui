@@ -1,85 +1,308 @@
-// src/app/pages/sticker-list/sticker-list.ts
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnDestroy } from '@angular/core';
 
 import { StickerService } from '../../services/sticker.service';
-import { CatalogContentService } from '../../services/catalog-content.service';
-import { CatalogToolbar } from "../homes/catalog-toolbar/catalog-toolbar";
-import { PromoBanner } from '../homes/promo-banner/promo-banner';
-import { KeywordList } from "../homes/keyword-list/keyword-list";
-import { TrustSignalList } from "../homes/trust-signal-list/trust-signal-list";
 import { ProductGrid } from '../../components/product-grid/product-grid';
 import { Pagination } from '../../components/pagination/pagination';
-import { SortValue,StickerFilters } from '../../interfaces/sticker-filters.interface';
+import { ChevronDown, LucideAngularModule } from 'lucide-angular';
+import { SortValue, StickerFilters } from '../../interfaces/sticker-filters.interface';
+
 const PAGE_SIZE = 12;
 
 @Component({
   selector: 'app-sticker-list',
-  imports: [CatalogToolbar, PromoBanner, KeywordList, TrustSignalList, ProductGrid, Pagination],
+  imports: [
+    ProductGrid,
+    Pagination,
+    LucideAngularModule,
+  ],
   templateUrl: './sticker-list.html',
 })
-export class StickerList {
+export class StickerList implements OnDestroy {
+
   private readonly stickerService = inject(StickerService);
-  protected readonly content = inject(CatalogContentService);
+protected readonly ChevronDown = ChevronDown;
 
-  private readonly category = signal('All Stickers');
-  private readonly sort = signal<SortValue>('relevant');
-  private readonly filters = signal<StickerFilters>({ onSaleOnly: false, maxPrice: null });
+  protected readonly category = signal('All Stickers');
+
+protected readonly filters = signal<StickerFilters>({
+  onSaleOnly:false,
+  maxPrice:null
+});
+
+protected readonly search = signal('');
+
   protected readonly currentPage = signal(1);
+protected readonly sort = signal<SortValue>('relevant');
 
-  protected readonly categories = ['All Stickers', ...new Set(this.content.getCategoryHighlights().map((c) => c.label))];
+  protected readonly categoriesWithCount = computed(() => {
 
-  /** Filtre + trie le catalogue complet — recalculé automatiquement à chaque changement. */
-  private readonly filteredStickers = computed(() => {
-    const filters = this.filters();
-    let result = this.stickerService.getStickers()();
+    const stickers = this.stickerService.getStickers()();
 
-    if (filters.onSaleOnly) {
-      result = result.filter((s) => !!s.discountPercent);
+    const categories = Array.from(
+      new Set(stickers.map(s => s.category))
+    );
+
+
+    return [
+      {
+        label:'All Stickers',
+        count: stickers.length
+      },
+
+      ...categories.map(category => ({
+        label:category,
+        count: stickers.filter(
+          s => s.category === category
+        ).length
+      }))
+    ];
+  });
+
+
+
+  protected readonly filteredStickers = computed(()=>{
+
+
+    let result = this.stickerService
+      .getStickers()();
+
+
+    const search = this.search()
+      .trim()
+      .toLowerCase();
+
+
+    // Recherche
+    if(search){
+
+      result = result.filter(sticker=>{
+
+        const content = [
+          sticker.name,
+          sticker.artist,
+          sticker.category,
+          sticker.description
+
+        ]
+        .join(' ')
+        .toLowerCase();
+
+
+        return content.includes(search);
+
+      });
+
     }
-    if (filters.maxPrice !== null) {
-      result = result.filter((s) => s.price <= filters.maxPrice!);
+
+
+
+    // catégorie
+
+    if(this.category() !== 'All Stickers'){
+
+      result = result.filter(
+        sticker =>
+        sticker.category === this.category()
+      );
+
     }
 
-    const sort = this.sort();
-    if (sort === 'price-asc') {
-      result = [...result].sort((a, b) => a.price - b.price);
-    } else if (sort === 'price-desc') {
-      result = [...result].sort((a, b) => b.price - a.price);
-    } else if (sort === 'newest') {
-      result = [...result].reverse();
+
+
+    // promo
+
+    // if(this.filters().onSaleOnly){
+
+    //   result = result.filter(
+    //     sticker =>
+    //     !!sticker.discountPercent
+    //   );
+
+    // }
+
+
+
+    // prix
+
+    if(this.filters().maxPrice !== null){
+
+      result = result.filter(
+        sticker =>
+        sticker.price <= this.filters().maxPrice!
+      );
+
     }
+
+
+
+    // tri
+
+    switch(this.sort()){
+
+
+      case 'price-asc':
+
+        result = [
+          ...result
+        ].sort(
+          (a,b)=>a.price-b.price
+        );
+
+        break;
+
+
+      case 'price-desc':
+
+        result=[
+          ...result
+        ].sort(
+          (a,b)=>b.price-a.price
+        );
+
+        break;
+
+
+
+      case 'newest':
+
+        result=[
+          ...result
+        ].reverse();
+
+        break;
+
+    }
+
 
     return result;
+
   });
 
-  protected readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredStickers().length / PAGE_SIZE)),
+
+
+  protected readonly totalPages = computed(()=>{
+
+    return Math.max(
+      1,
+      Math.ceil(
+        this.filteredStickers().length / PAGE_SIZE
+      )
+    );
+
+  });
+
+
+
+  protected readonly pageStickers = computed(()=>{
+
+    const start =
+    (this.currentPage()-1)*PAGE_SIZE;
+
+
+    return this.filteredStickers()
+      .slice(start,start+PAGE_SIZE);
+
+  });
+
+
+
+  protected readonly resultCount = computed(()=>
+    this.filteredStickers().length
   );
 
-  protected readonly pageStickers = computed(() => {
-    const start = (this.currentPage() - 1) * PAGE_SIZE;
-    return this.filteredStickers().slice(start, start + PAGE_SIZE);
-  });
 
-  protected onCategoryChange(category: string): void {
+
+  private searchTimeout?: ReturnType<typeof setTimeout>;
+
+
+
+  protected onSearchChange(value:string){
+
+    clearTimeout(this.searchTimeout);
+
+
+    this.searchTimeout=setTimeout(()=>{
+
+      this.search.set(value);
+
+      this.currentPage.set(1);
+
+    },300);
+
+  }
+
+
+
+
+  protected onCategoryChange(category:string){
+
     this.category.set(category);
     this.currentPage.set(1);
-    // Le filtrage par catégorie nécessite un champ `category` sur Sticker —
-    // voir la note sous le code pour le brancher si ton modèle ne l'a pas encore.
+
   }
 
-  protected onSortChange(sort: any): void {
+
+
+  protected onSortChange(sort:SortValue){
+
     this.sort.set(sort);
     this.currentPage.set(1);
+
   }
 
-  protected onFiltersChange(filters: StickerFilters): void {
+
+
+  protected onFiltersChange(filters:StickerFilters){
+
     this.filters.set(filters);
     this.currentPage.set(1);
+
   }
 
-  protected setPage(page: number): void {
-    this.currentPage.set(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+  protected resetFilters(){
+
+    this.search.set('');
+
+    this.category.set(
+      'All Stickers'
+    );
+
+    this.sort.set(
+      'relevant'
+    );
+
+    this.filters.set({
+      onSaleOnly:false,
+      maxPrice:null
+    });
+
+
+    this.currentPage.set(1);
+
   }
+
+
+
+
+  protected setPage(page:number){
+
+    this.currentPage.set(page);
+
+    window.scrollTo({
+      top:0,
+      behavior:'smooth'
+    });
+
+  }
+
+
+
+  ngOnDestroy(){
+
+    clearTimeout(this.searchTimeout);
+
+  }
+
 }

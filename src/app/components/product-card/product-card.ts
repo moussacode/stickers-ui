@@ -12,12 +12,12 @@ import { RouterLink } from "@angular/router";
     <div class="group flex w-full flex-col overflow-hidden rounded-lg bg-white transition-shadow ">
       <div 
        [routerLink]="['/stickers', sticker().id]"
-       class="relative cursor-pointer aspect-square w-full overflow-hidden rounded-lg bg-border-hairline">
+       class="group relative aspect-square overflow-hidden rounded-lg bg-border-hairline cursor-pointer  lg:p-6">
         <img
-          [src]="sticker().imageUrl"
+          [src]="sticker().images[0]"
           [alt]="sticker().name"
           loading="lazy"
-          class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+          class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
 
         @if (sticker().discountPercent) {
@@ -53,21 +53,22 @@ import { RouterLink } from "@angular/router";
           </div>
 
           <button
-            type="button"
-            class="flex size-9 cursor-pointer shrink-0 items-center justify-center rounded-full border-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand active:scale-95"
-            [class.border-ink-faint]="!justAdded()"
-            [class.text-ink]="!justAdded()"
-            [class.bg-white]="!justAdded()"
-            [class.hover:border-brand]="!justAdded()"
-            [class.hover:text-brand]="!justAdded()"
-            [class.border-brand]="justAdded()"
-            [class.bg-brand]="justAdded()"
-            [class.text-white]="justAdded()"
-            (click)="addToBag()"
-            [attr.aria-label]="'Ajouter ' + sticker().name + ' au sac'"
-          >
-            <lucide-icon [img]="justAdded() ? Check : Plus" class="size-4"></lucide-icon>
-          </button>
+  type="button"
+  class="flex size-9 cursor-pointer shrink-0 items-center justify-center rounded-full border-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+  [disabled]="justAdded()"
+  [class.border-ink-faint]="!justAdded()"
+  [class.text-ink]="!justAdded()"
+  [class.bg-white]="!justAdded()"
+  [class.hover:border-brand]="!justAdded()"
+  [class.hover:text-brand]="!justAdded()"
+  [class.border-brand]="justAdded()"
+  [class.bg-brand]="justAdded()"
+  [class.text-white]="justAdded()"
+  (click)="addToBag()"
+  [attr.aria-label]="'Ajouter ' + sticker().name + ' au sac'"
+>
+  <lucide-icon [img]="justAdded() ? Check : Plus" class="size-4"></lucide-icon>
+</button>
         </div>
       </div>
     </div>
@@ -83,9 +84,12 @@ export class ProductCard {
   protected readonly isWished = signal(false);
   protected readonly justAdded = signal(false);
 
-  protected addToBag(): void {
-    this.cart.addToBag(this.sticker());
-    this.justAdded.set(true);
-    setTimeout(() => this.justAdded.set(false), 900);
-  }
+protected addToBag(): void {
+  if (this.justAdded()) return;
+
+  this.justAdded.set(true);
+  this.cart.addToBag(this.sticker());
+
+  setTimeout(() => this.justAdded.set(false), 900);
+}
 }
