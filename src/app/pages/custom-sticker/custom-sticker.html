@@ -1,15 +1,15 @@
-<section class="mx-auto max-w-[1100px] px-6 py-6 sm:py-20">
+<section class="mx-auto max-w-[1100px] px-6  sm:py-20">
 
   <!-- Header -->
   <div class="mx-auto max-w-2xl text-center">
     
-    <h1 class="mt-5 text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+    <h1 class=" text-2xl font-semibold leading-tight text-ink sm:text-5xl">
       Ton idée. Ton sticker.
     </h1>
 
     <p class="mx-auto mt-4 max-w-xl text-lg leading-7 text-ink-soft">
       Un logo, une photo, un dessin ou juste une idée en tête - on la transforme en sticker
-      vinyle sur mesure, prêt à coller sur ton laptop, ta gourde ou ton carnet.
+      prêt à coller sur ton laptop, ta gourde ou ton carnet.
     </p>
   </div>
 
@@ -28,39 +28,49 @@
   </div> -->
 
   <!-- Étapes séquentielles, pas des cartes isolées -->
-  <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-    @for (step of steps; track step.title; let i = $index) {
-      <div class="relative flex flex-col gap-3">
-        <div class="flex size-12 items-center justify-center rounded-full bg-surface-lilac text-lg font-semibold text-surface-lilac-text">
-          {{ i + 1 }}
-        </div>
+ <div class="mt-5 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+  @for (step of steps; track step.title; let i = $index) {
+    <div class="flex flex-col items-center gap-3 rounded-2xl border border-border-hairline bg-white p-6 text-center transition ">
 
-        @if (i < steps.length - 1) {
-          <div class="absolute left-6 top-12 hidden h-px w-full bg-border-muted lg:block"></div>
-        }
-
-        <h3 class="text-base font-semibold text-ink">{{ step.title }}</h3>
-        <p class="text-sm leading-6 text-ink-soft">{{ step.description }}</p>
+      <div class="flex size-16 items-center justify-center rounded-full bg-surface-lilac text-surface-lilac-text">
+        <lucide-icon [img]="step.icon" class="size-7"></lucide-icon>
       </div>
-    }
-  </div>
 
-  <!-- Repères concrets avant l'appel à l'action -->
-  <div class="mx-auto mt-14 flex max-w-xl flex-wrap items-center justify-center gap-x-8 gap-y-3 rounded-2xl bg-border-hairline px-6 py-5 text-sm text-ink-soft">
-    <span class="flex items-center gap-2">
-      <lucide-icon [img]="Clock" class="size-4 text-brand"></lucide-icon>
-      Réponse sous 24h
-    </span>
-    <span class="flex items-center gap-2">
-      <lucide-icon [img]="Tag" class="size-4 text-brand"></lucide-icon>
-      À partir de 500 FCFA
-    </span>
-    <span class="flex items-center gap-2">
-      <lucide-icon [img]="Package" class="size-4 text-brand"></lucide-icon>
-      Aucune quantité minimum
-    </span>
-  </div>
+      <p class="text-sm font-semibold text-ink-faint">
+        Étape {{ i + 1 }}
+      </p>
 
+      <h3 class="text-lg font-semibold text-ink">
+        {{ step.title }}
+      </h3>
+
+      <p class="text-sm leading-6 text-ink-soft">
+        {{ step.description }}
+      </p>
+
+    </div>
+  }
+</div>
+
+<!-- Repères concrets -->
+<!-- <div class="mx-auto mt-14 flex max-w-xl flex-wrap items-center justify-center gap-x-8 gap-y-3 rounded-2xl bg-border-hairline px-6 py-5 text-sm text-ink-soft">
+
+  <span class="flex items-center gap-2">
+    <lucide-icon [img]="Clock" class="size-4 text-brand"></lucide-icon>
+    Réponse sous 24h
+  </span>
+
+  <span class="flex items-center gap-2">
+    <lucide-icon [img]="Tag" class="size-4 text-brand"></lucide-icon>
+    Devis personnalisé
+  </span>
+
+  <span class="flex items-center gap-2">
+    <lucide-icon [img]="Package" class="size-4 text-brand"></lucide-icon>
+    À partir d'une image ou d'un logo
+  </span>
+
+</div> -->
   <!-- CTA -->
   <div class="mt-10 flex flex-col items-center gap-3 text-center">
     <a
@@ -70,7 +80,7 @@
       class="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-[#25D366] px-8 text-lg font-semibold text-white shadow-lg transition hover:opacity-90"
     >
       <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
-      Demander mon devis sur WhatsApp
+      Demander mon sticker sur WhatsApp
     </a>
     <p class="text-xs text-ink-faint">Aucun engagement - on discute d'abord de ton projet.</p>
   </div>

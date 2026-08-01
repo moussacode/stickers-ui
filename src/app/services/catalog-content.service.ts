@@ -14,6 +14,7 @@ import { RotateCcw, Code2,
   Pin,
   Shirt, } from 'lucide-angular';
 import { CATEGORY_NAV } from '../mocks/catalog.mock';
+import { WHATSAPP_NUMBER } from '../config/site-config';
 
 
 @Injectable({ providedIn: 'root' })
@@ -121,37 +122,22 @@ export class CatalogContentService {
   }
 
   getFooterLinkGroups(): FooterLinkGroup[] {
-    return [
-      {
-        heading: 'Shop',
-        links: [
-          { label: 'Gift Guides' },
-          { label: 'Fan Art' },
-          { label: 'New Works' },
-          
-          { label: 'Bulk orders' },
-        ],
-      },
-      {
-        heading: 'About',
-        links: [
-          { label: 'About Us' },
-          { label: 'Investor Center' },
-          { label: 'Partner Program' },
-         
-        ],
-      },
-      {
-        heading: 'Help',
-        links: [
-          { label: 'Delivery' },
-          
-          { label: 'Copyright' },
-          { label: 'Contact Us' },
-        ],
-      },
-    ];
-  }
+  return [
+    {
+      heading: 'Navigation',
+      links: [
+        { label: 'Boutique', href: '/stickers' },
+        { label: 'Stickers personnalisés', href: '/custom-sticker' },
+      ],
+    },
+    {
+      heading: 'Contact',
+      links: [
+        { label: 'WhatsApp', href: `https://wa.me/${WHATSAPP_NUMBER}` }
+      ],
+    },
+  ];
+}
 
   getSocialLinks(): SocialLink[] {
     return [

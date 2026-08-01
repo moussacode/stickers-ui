@@ -1,36 +1,81 @@
 import { Component, inject } from '@angular/core';
 import { WhatsAppService } from '../../services/whatsapp.service';
 
-import { LucideAngularModule, Sparkles, Clock, Tag, Package, MessageCircle } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Link,
+  Palette,
+  MessageCircle,
+  Package,
+  Clock,
+  Tag
+} from 'lucide-angular';
+
+interface Step {
+  icon: any;
+  title: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-custom-sticker',
-  imports: [LucideAngularModule],
   standalone: true,
+  imports: [LucideAngularModule],
   templateUrl: './custom-sticker.html',
 })
 export class CustomSticker {
-   private readonly whatsapp = inject(WhatsAppService);
+
+  private readonly whatsapp = inject(WhatsAppService);
 
   protected readonly customStickerWhatsAppUrl =
     this.whatsapp.createCustomStickerLink();
-  protected readonly Sparkles = Sparkles;
+
   protected readonly Clock = Clock;
   protected readonly Tag = Tag;
   protected readonly Package = Package;
+  protected readonly Link = Link;
+  protected readonly Palette = Palette;
   protected readonly MessageCircle = MessageCircle;
 
   protected readonly examples = [
-    { imageUrl: 'https://picsum.photos/seed/custom-1/200/200', alt: 'Exemple de sticker personnalisé 1' },
-    { imageUrl: 'https://picsum.photos/seed/custom-2/200/200', alt: 'Exemple de sticker personnalisé 2' },
-    { imageUrl: 'https://picsum.photos/seed/custom-3/200/200', alt: 'Exemple de sticker personnalisé 3' },
+    {
+      imageUrl: 'images/products/Java.png',
+      alt: 'Sticker React personnalisé',
+    },
+    {
+      imageUrl: 'images/products/python(7).png',
+      alt: 'Sticker Python personnalisé',
+    },
+    {
+      imageUrl: 'images/products/nodejs.png',
+      alt: 'Sticker Node.js personnalisé',
+    },
   ];
 
-  protected readonly steps = [
-    { title: 'Envoie ton idée', description: "Logo, photo, dessin ou simple description — envoie-nous ce que tu as en tête." },
-    { title: 'On te propose un rendu', description: 'On adapte le format, le style et la découpe à ton support (laptop, gourde, carnet...).' },
-    { title: 'Tu valides le devis', description: 'Prix basé sur le modèle et la quantité — aucune surprise, tu valides avant impression.' },
-    { title: 'Échange et livraison', description: 'Tout se passe directement sur WhatsApp, du brief à la remise du sticker.' },
+  protected readonly steps: Step[] = [
+    {
+      icon: Link,
+      title: 'Partage ton idée',
+      description:
+        'Envoie un logo, une image ou un lien qui servira de base à ton sticker personnalisé.',
+    },
+    {
+      icon: Palette,
+      title: 'Nous créons le design',
+      description:
+        'Nous adaptons le style, les couleurs et le format selon ton besoin.',
+    },
+    {
+      icon: MessageCircle,
+      title: 'Validation sur WhatsApp',
+      description:
+        'Tu échanges directement avec notre équipe, reçois un devis et valides le visuel.',
+    },
+    {
+      icon: Package,
+      title: 'Impression et livraison',
+      description:
+        'Une fois validé, nous imprimons tes stickers et organisons la livraison.',
+    },
   ];
-
 }

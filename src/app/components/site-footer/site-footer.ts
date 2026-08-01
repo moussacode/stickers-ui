@@ -14,7 +14,7 @@ import { LucideAngularModule } from 'lucide-angular';
             <p class="mb-3 text-sm font-semibold text-ink">{{ group.heading }}</p>
             <ul class="space-y-2">
               @for (link of group.links; track link.label) {
-                <li><a href="#" class="text-sm text-ink-soft hover:text-ink">{{ link.label }}</a></li>
+                <li><a [href]="link.href" class="text-sm text-ink-soft hover:text-ink">{{ link.label }}</a></li>
               }
             </ul>
           </div>
