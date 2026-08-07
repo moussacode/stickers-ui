@@ -32,7 +32,7 @@ protected readonly filters = signal<StickerFilters>({
 protected readonly search = signal('');
 
   protected readonly currentPage = signal(1);
-protected readonly sort = signal<SortValue>('relevant');
+protected readonly sort = signal<SortValue>('newest');
 
   protected readonly categoriesWithCount = computed(() => {
 
@@ -270,7 +270,7 @@ protected readonly sort = signal<SortValue>('relevant');
     );
 
     this.sort.set(
-      'relevant'
+      'newest'
     );
 
     this.filters.set({
