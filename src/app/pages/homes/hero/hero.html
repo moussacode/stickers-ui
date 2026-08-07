@@ -44,7 +44,7 @@
           [src]="sticker.imageUrl"
           [alt]="sticker.alt"
           loading="lazy"
-          class="absolute rounded-full border-4 border-white object-cover shadow-lg {{ sticker.size }} {{ sticker.rotate }}"
+          class="absolute  {{ sticker.size }} {{ sticker.rotate }}"
           [class.hidden]="sticker.hideOnMobile"
           [class.sm:block]="sticker.hideOnMobile"
           [style.top.%]="sticker.topPct"

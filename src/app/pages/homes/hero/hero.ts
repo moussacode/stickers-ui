@@ -28,9 +28,9 @@ export class Hero {
 
 
   protected readonly stickers: FloatingSticker[] = [
-    { imageUrl: 'images/products/python(7).png', alt: 'Bash Terminal sticker', size: 'size-28 sm:size-40 lg:size-48', topPct: 2, leftPct: 4, rotate: '-rotate-6', z: 2 },
-    { imageUrl: 'images/products/Java.png', alt: 'React Logo sticker', size: 'size-24 sm:size-32 lg:size-40', topPct: 30, leftPct: 45, rotate: 'rotate-12', z: 3 },
-    { imageUrl: 'images/products/Java.png', alt: '404 Not Found sticker', size: 'size-20 sm:size-28 lg:size-36', topPct: 62, leftPct: 2, rotate: 'rotate-3', z: 1, hideOnMobile: true },
-    { imageUrl: 'images/products/Java.png', alt: 'Coffee and Code sticker', size: 'size-16 sm:size-24 lg:size-32', topPct: 4, leftPct: 68, rotate: '-rotate-12', z: 1, hideOnMobile: true },
-  ];
+  { imageUrl: 'images/products/F1 Car Ferrari.png', alt: 'React Logo sticker', size: 'size-28 sm:size-40 lg:size-48', topPct: 2, leftPct: 4, rotate: '-rotate-6', z: 2 },
+  { imageUrl: 'images/products/Batman1.png', alt: 'Batman sticker', size: 'size-24 sm:size-32 lg:size-40', topPct: 30, leftPct: 45, rotate: 'rotate-12', z: 3 },
+  { imageUrl: 'images/products/Works Hard.png', alt: 'Keep Going sticker', size: 'size-20 sm:size-28 lg:size-36', topPct: 62, leftPct: 2, rotate: 'rotate-3', z: 1, hideOnMobile: true },
+  { imageUrl: 'images/products/Papillon Rose.png', alt: 'F1 Ferrari sticker', size: 'size-16 sm:size-24 lg:size-32', topPct: 4, leftPct: 68, rotate: '-rotate-12', z: 1, hideOnMobile: true },
+];
 }
