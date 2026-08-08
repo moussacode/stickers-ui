@@ -94,17 +94,55 @@
           <span class="text-ink-soft">Total</span>
           <span class="text-lg font-semibold text-ink">{{ cart.totalPrice() }} FCFA</span>
         </div>
-<a
-        
-          [href]="cart.buildWhatsAppCheckoutUrl()"
-          target="_blank"
-          rel="noopener"
-          class="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#25D366] font-semibold text-white hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"
-        >
-          <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
-          Commander via WhatsApp
-        </a>
+        <div class="mb-5">
+  <p class="mb-3 text-sm font-semibold text-ink">
+    Nos points de récupération
+  </p>
 
+  <div class="grid grid-cols-2 gap-3">
+    <button
+      type="button"
+      class="rounded-xl cursor-pointer border px-3 py-3 text-sm font-medium transition"
+      [class.border-brand]="pickupLocation() === 'Cité Keur Gorgui'"
+      [class.bg-brand/5]="pickupLocation() === 'Cité Keur Gorgui'"
+      (click)="pickupLocation.set('Cité Keur Gorgui')"
+    >
+      Cité Keur Gorgui
+    </button>
+
+    <button
+      type="button"
+      class="rounded-xl border cursor-pointer px-3 py-3 text-sm font-medium transition"
+      [class.border-brand]="pickupLocation() === 'Yoff'"
+      [class.bg-brand/5]="pickupLocation() === 'Yoff'"
+      (click)="pickupLocation.set('Yoff')"
+    >
+      Yoff
+    </button>
+
+     <button
+    type="button"
+    class="cursor-pointer rounded-xl border px-3 py-3 text-sm font-medium transition"
+    [class.border-brand]="pickupLocation() === 'Autre'"
+    [class.bg-brand/5]="pickupLocation() === 'Autre'"
+    (click)="pickupLocation.set('Autre')"
+  >
+    Autre lieu à convenir
+  </button>
+  </div>
+</div>
+
+<a
+  [href]="pickupLocation() ? cart.buildWhatsAppCheckoutUrl(pickupLocation()) : null"
+  [class.pointer-events-none]="!pickupLocation()"
+  [class.opacity-50]="!pickupLocation()"
+  target="_blank"
+  rel="noopener"
+  class="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#25D366] font-semibold text-white"
+>
+  <lucide-icon [img]="MessageCircle" class="size-5"></lucide-icon>
+  Commander via WhatsApp
+</a>
         <p class="mt-3 text-center text-xs text-ink-faint">
           La commande est finalisée directement sur WhatsApp avec le vendeur.
         </p>

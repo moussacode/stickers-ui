@@ -1,5 +1,5 @@
 // cart-drawer.ts — ajoute juste la fermeture au clavier
-import { Component, HostListener, inject, input, output } from '@angular/core';
+import { Component, HostListener, inject, input, output, signal } from '@angular/core';
 import { LucideAngularModule, X, Minus, Plus, Trash2, MessageCircle, ShoppingBag } from 'lucide-angular';
 import { CartService } from '../../services/cart.service';
 
@@ -16,6 +16,7 @@ export class CartDrawer {
   protected readonly Trash2 = Trash2;
   protected readonly MessageCircle = MessageCircle;
   protected readonly ShoppingBag = ShoppingBag;
+  protected readonly pickupLocation = signal('');
 
   open = input.required<boolean>();
   close = output<void>();
