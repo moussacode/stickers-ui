@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Checkout } from './pages/checkout/checkout';
 
 export const routes: Routes = [
 
@@ -8,6 +9,10 @@ export const routes: Routes = [
       import('./pages/home/home')
         .then(m => m.Home),
   },
+  {
+  path: 'checkout',
+  component: Checkout
+},
 
   {
     path: 'stickers',
