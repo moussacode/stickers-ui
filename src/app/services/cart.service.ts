@@ -76,22 +76,27 @@ export class CartService {
    * quantity, and the estimated total — ready for the seller to close the
    * sale directly on WhatsApp. No payment happens on the site itself.
    */
-  buildWhatsAppCheckoutUrl(): string {
-    const lines = this._items().map(
-      (item) =>
-        `- ${item.quantity}x ${item.sticker.name} — ${item.sticker.price * item.quantity} ${item.sticker.currency}`,
-    );
-    const message = [
-      'Bonjour ! Je souhaite commander :',
-      '',
-      ...lines,
-      '',
-      `Total estimé : ${this.totalPrice()} ${this._items()[0]?.sticker.currency ?? 'FCFA'}`,
-    ].join('\n');
+ buildWhatsAppCheckoutUrl(pickupLocation: string): string {
+  const lines = this._items().map(
+    (item) =>
+      `- ${item.quantity}x ${item.sticker.name} — ${
+        item.sticker.price * item.quantity
+      } ${item.sticker.currency}`,
+  );
 
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  }
+  const message = [
+    'Bonjour ! Je souhaite commander :',
+    '',
+    ...lines,
+    '',
+    `Total estimé : ${this.totalPrice()} ${
+      this._items()[0]?.sticker.currency ?? 'FCFA'
+    }`,
+    `📍 Lieu de récupération : ${pickupLocation}`,
+  ].join('\n');
 
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
   private readFromSession(): CartItem[] {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
